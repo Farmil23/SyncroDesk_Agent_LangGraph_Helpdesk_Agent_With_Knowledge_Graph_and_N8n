@@ -1,0 +1,40 @@
+[
+  {
+    "id": "neo4j-person-not-found",
+    "enabled": true,
+    "ticket_id": "eval-neo4j-miss",
+    "user_email": "definitely.not.in.graph@example.com",
+    "issue_text": "Please reset my SSO account password — I cannot log in.",
+    "invoke_twice": false,
+    "expect": {
+      "cache_hit": false,
+      "user_context_contains": "No Person node found"
+    }
+  },
+  {
+    "id": "chroma-sop-present-after-ingest",
+    "enabled": false,
+    "ticket_id": "eval-chroma-sop",
+    "user_email": "qa.user@company.com",
+    "issue_text": "What is the official corporate VPN procedure per IT policy? I need the formal steps.",
+    "invoke_twice": false,
+    "expect": {
+      "sop_found": true,
+      "category_contains": "IT"
+    }
+  },
+  {
+    "id": "cache-hit-on-repeat-invoke",
+    "enabled": false,
+    "ticket_id": "eval-cache-repeat",
+    "user_email": "cache.test@company.com",
+    "issue_text": "Cache test: corporate Wi-Fi does not connect after rebooting my laptop.",
+    "invoke_twice": true,
+    "expect_first": {
+      "cache_hit": false
+    },
+    "expect_second": {
+      "cache_hit": true
+    }
+  }
+]

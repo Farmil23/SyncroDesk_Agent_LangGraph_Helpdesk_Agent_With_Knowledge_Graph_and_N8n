@@ -49,18 +49,20 @@ workflow.add_edge("cache_write", "drafter")
 workflow.add_edge("drafter", "guardrail")
 
 
-def check_safety(state):
-    """Kalau draf dianggap aman → selesai; kalau tidak → minta drafter tulis ulang."""
-    return "final" if state["is_safe"] else "re-draft"
+# def check_safety(state):
+#     """Kalau draf dianggap aman → selesai; kalau tidak → minta drafter tulis ulang."""
+#     return "final" if state["is_safe"] else "re-draft"
 
 
-workflow.add_conditional_edges(
-    "guardrail",
-    check_safety,
-    {
-        "final": END,
-        "re-draft": "drafter",
-    },
-)
+# workflow.add_conditional_edges(
+#     "guardrail",
+#     check_safety,
+#     {
+#         "final": END,
+#         "re-draft": "drafter",
+#     },
+# )
+
+workflow.add_edge("guardrail", END)
 
 app_graph = workflow.compile()

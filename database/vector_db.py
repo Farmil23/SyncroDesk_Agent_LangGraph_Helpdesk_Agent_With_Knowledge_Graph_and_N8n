@@ -27,10 +27,10 @@ def ingest_documents():
     # Pastikan folder ada
     if not os.path.exists(SOP_FOLDER):
         os.makedirs(SOP_FOLDER)
-        print(f"Folder {SOP_FOLDER} dibuat. Silakan isi dengan file .txt SOP.")
+        print(f"Created folder {SOP_FOLDER}. Add your SOP PDF files there.")
         return
 
-    print(f"Membaca dokumen dari folder {SOP_FOLDER}...")
+    print(f"Loading documents from {SOP_FOLDER}...")
     
     # 1. LOAD: Reading the file pdf dokumen in SOP folder
     loader = DirectoryLoader(
@@ -48,10 +48,10 @@ def ingest_documents():
     print(PATH)
         
     if not documents:
-        print("❌ Tidak ada dokumen .pdf yang ditemukan di folder data/sops!")
+        print("❌ No .pdf documents found under data/sops/")
         return
 
-    print(f"✅ Menemukan {len(documents)} dokumen utuh.")
+    print(f"✅ Loaded {len(documents)} document(s).")
 
     # 2. SPLIT: Memecah dokumen menjadi potongan kecil (Chunking)
     text_splitter = RecursiveCharacterTextSplitter(
@@ -61,16 +61,16 @@ def ingest_documents():
     )
     
     chunks = text_splitter.split_documents(documents)
-    print(f"✅ Dokumen berhasil dipecah menjadi {len(chunks)} chunks.")
+    print(f"✅ Split into {len(chunks)} chunk(s).")
 
     # 3. STORE: Mengubah chunk teks menjadi vektor (Embed) dan menyimpannya di ChromaDB
-    print("Memproses embedding dan menyimpan ke ChromaDB...")
+    print("Embedding and persisting to ChromaDB...")
     vector_db = Chroma.from_documents(
         documents=chunks,
         embedding=embeddings_model,
         persist_directory=CHROMA_DB_DIR
     )
-    print("✅ Pipeline RAG selesai! Dokumen siap digunakan oleh Agen LangGraph.")
+    print("✅ RAG ingest complete. Documents are ready for the LangGraph agent.")
 
 def get_retriever():
     """Fungsi untuk dipanggil oleh LangGraph nanti saat mencari jawaban"""

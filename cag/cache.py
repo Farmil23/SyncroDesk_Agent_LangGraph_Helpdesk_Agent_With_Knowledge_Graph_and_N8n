@@ -14,14 +14,20 @@ Bagaimana cara kerjanya (intuisi)?
 """
 
 import os
+from pathlib import Path
 
 import faiss
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 from langchain_community.docstore.in_memory import InMemoryDocstore
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
 
-load_dotenv()
+# Robust .env loading:
+# - When running under uvicorn/n8n, the process CWD may not be the repo root.
+# - `find_dotenv(usecwd=True)` searches from CWD upwards.
+# - Fallback to a `.env` next to the project root (two levels above this file).
+_dotenv_path = find_dotenv(usecwd=True) or str(Path(__file__).resolve().parents[1] / ".env")
+load_dotenv(_dotenv_path, override=False)
 
 # ----- QA CACHE (EMPTY, SAFE INIT) -----
 # IndexFlatL2 = ukur "jarak" antar vektor (semakin kecil = semakin mirip).
@@ -49,7 +55,13 @@ def cache_aktif() -> bool:
       Supaya perilaku API tetap sama seperti sebelum ada cache,
       sampai kamu set CAG_ENABLED=true di environment.
     """
-    v = os.getenv("CAG_ENABLED", "").strip().lower()
+    # Accept a couple of common env var names to avoid "always OFF" confusion.
+    v = (
+        os.getenv("CAG_ENABLED")
+        or os.getenv("CACHE_ENABLED")
+        or os.getenv("CAG_CACHE_ENABLED")
+        or ""
+    ).strip().lower()
     return v in ("1", "true", "yes", "on")
 
 

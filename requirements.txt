@@ -1,0 +1,21 @@
+fastapi
+uvicorn
+langgraph
+
+chromadb
+neo4j
+
+pydantic
+python-dotenv
+
+# Langchain
+langchain-experimental 
+langchain-community
+langchain-google-genai
+langchain-neo4j
+langchain-core
+langchain-groq
+langchain-chroma
+langchain-openai
+faiss-cpu
+typing_extensions

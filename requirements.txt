@@ -17,5 +17,8 @@ langchain-core
 langchain-groq
 langchain-chroma
 langchain-openai
+langchain-classic
+
+
 faiss-cpu
 typing_extensions
